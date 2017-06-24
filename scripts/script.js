@@ -235,14 +235,26 @@ function updateBallFall() {
 }
 
 function keydownEvent(event) {
-  if (event.keyCode == 32 && !spacebarHit && BLOCK_VER_OFFSET == 0) {
+  if (event.keyCode == 32 && !spacebarHit) {
     spacebarHit = true;
   }
 }
 
-function touchEvent(event) {
-  if (!spacebarHit && BLOCK_VER_OFFSET == 0) {
+function keyupEvent(event) {
+  if (event.keyCode == 32 && spacebarHit) {
+    spacebarHit = false;
+  }
+}
+
+function touchStartEvent(event) {
+  if (!spacebarHit) {
     spacebarHit = true;
+  }
+}
+
+function touchEndEvent(event) {
+  if (spacebarHit) {
+    spacebarHit = false;
   }
 }
 
@@ -254,7 +266,9 @@ $(function () {
 
     // Event handlers;
     $(document).keydown(keydownEvent);
-    $(document).on('touchstart', touchEvent);
+    $(document).keyup(keyupEvent);
+    $(document).on('touchstart', touchStartEvent);
+    $(document).on('touchend', touchEndEvent);
 
 
     function gameLoop() {
